@@ -13,13 +13,13 @@ Pod::Spec.new do |s|
   s.author          = { "Segment" => "friends@segment.io" }
 
   s.source          = { :git => "https://github.com/segmentio/analytics-ios.git", :tag => s.version.to_s }
-  s.ios.deployment_target = '6.0'
+  s.tvos.deployment_target = '9.0'
   s.requires_arc    = true
 
   s.subspec 'Core-iOS' do |ss|
     ss.public_header_files = ['Analytics/*.h', 'Analytics/Helpers/*.h', 'Analytics/Integrations/SEGAnalyticsIntegrations.h']
     ss.source_files = ['Analytics/*.{h,m}', 'Analytics/Helpers/*.{h,m}', 'Analytics/Integrations/SEGAnalyticsIntegrations.h']
-    ss.platform = :ios, '6.0'
+    ss.platform = :tvos, '9.0'
     ss.weak_frameworks = ['CoreBluetooth', 'SystemConfiguration', 'CoreLocation']
     ss.dependency 'TRVSDictionaryWithCaseInsensitivity', '0.0.2'
     s.xcconfig = { 'GCC_PREPROCESSOR_DEFINITIONS' => "ANALYTICS_VERSION=#{s.version}" }
@@ -28,9 +28,9 @@ Pod::Spec.new do |s|
   Build.subspecs.each do |a|
     s.subspec a.name do |ss|
       ss.prefix_header_contents = "#define USE_ANALYTICS_#{a.name.upcase} 1"
-      ss.public_header_files = ['Analytics/Integrations/*.h', "Analytics/Integrations/#{a.name}/SEG#{a.name}Integration.h"]
-      ss.ios.source_files = "Analytics/Integrations/#{a.name}/SEG#{a.name}Integration.{h,m}"
-      ss.platform = :ios, '6.0'
+      ss.public_header_files = ['Analytics/Integrations/*.h', "Analytics/Integrations/#{a.name}/*.h"]
+      ss.tvos.source_files = "Analytics/Integrations/#{a.name}/*.{h,m}"
+      ss.platform = :tvos, '9.0'
 
       ss.dependency 'Analytics/Core-iOS'
       ss.dependency 'Analytics/Segmentio' unless a.is_segment?
